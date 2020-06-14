@@ -1,12 +1,15 @@
 #include "c2p.hpp"
 #include "cxxopts.hpp"
 
+const std::string VERSION = "0.1.0";
+
 cxxopts::ParseResult parse_options(int argc, char* argv[]) {
     cxxopts::Options options("c2pconvert", "Convert a C2P image to a PNG image");
     options.add_options()
-		("h,help", "Print usage")
-		("i,input", "Input C2P file", cxxopts::value<std::string>())
-		("o,output", "Output PNG file", cxxopts::value<std::string>());
+        ("h,help", "Print usage")
+        ("v,version", "Print version")
+        ("i,input", "Input C2P file", cxxopts::value<std::string>())
+        ("o,output", "Output PNG file", cxxopts::value<std::string>());
 
     options.parse_positional({"input", "output"});
     options.positional_help("<input> <output>").show_positional_help();
@@ -16,6 +19,11 @@ cxxopts::ParseResult parse_options(int argc, char* argv[]) {
 
         if (result.count("help")) {
             std::cout << options.help(); 
+            exit(0);
+        }
+
+        if (result.count("version")) {
+            std::cout << "c2pconvert version " << VERSION << std::endl;
             exit(0);
         }
 
