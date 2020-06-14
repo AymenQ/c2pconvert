@@ -17,3 +17,8 @@ make
 
 ## Contributing
 Pull requests are welcome. If you discover a bug, please open an issue.
+
+## License
+This project is licensed under the [MIT license](/LICENSE.txt).
+
+This project makes use of [cxxopts](https://github.com/jarro2783/cxxopts) (included in the repository), as well as [zlib](https://zlib.net) & [libpng](http://www.libpng.org/pub/png/libpng.html).
