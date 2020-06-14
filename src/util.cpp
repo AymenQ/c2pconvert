@@ -44,7 +44,7 @@ std::vector<uint8_t> read_vector(std::istream &file, int position, std::size_t l
 }
 
 // Inflate zlib-compressed data
-std::vector<uint8_t> decompress_zlib(std::vector<uint8_t> buffer) {
+std::vector<uint8_t> decompress_zlib(std::vector<uint8_t> &buffer) {
     z_stream stream;
     stream.zalloc = Z_NULL;
     stream.zfree = Z_NULL;

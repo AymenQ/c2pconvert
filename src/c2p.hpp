@@ -12,7 +12,7 @@ class C2PFile {
 
   private:
     C2PFile(int width, int height, int size);
-    static C2PFile load_file(std::string &input_path);
+    static C2PFile load_file(const std::string &input_path);
     std::vector<png_bytep> convert_to_rgb888();
     std::vector<uint8_t> rgb888;
     std::vector<uint8_t> rgb565;

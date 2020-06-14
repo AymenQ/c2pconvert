@@ -8,7 +8,7 @@ C2PFile::C2PFile(const std::string &input_path) : C2PFile{load_file(input_path)}
 
 C2PFile::C2PFile(int width, int height, int size) : width(width), height(height), size(size) {}
 
-C2PFile C2PFile::load_file(std::string &input_path) {
+C2PFile C2PFile::load_file(const std::string &input_path) {
     std::ifstream file(input_path, std::ifstream::in | std::ifstream::binary);
     if (!file)
         throw std::system_error(ENOENT, std::system_category());
