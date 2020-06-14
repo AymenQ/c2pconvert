@@ -1847,6 +1847,9 @@ ParseResult::parse(int& argc, char**& argv)
       }
       else
       {
+        if(!m_allow_unrecognised) {
+          throw_or_mimic<option_not_exists_exception>(argv[current]);
+        }
         argv[nextKeep] = argv[current];
         ++nextKeep;
       }
