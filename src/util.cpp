@@ -1,5 +1,6 @@
 #include "util.hpp"
 
+#include <array>
 #include <fstream>
 #include <zlib.h>
 
@@ -7,27 +8,27 @@ constexpr uint16_t CHUNK{16384};
 
 // PNG custom write/flush functions for streams
 void write_data(png_structp png_ptr, png_bytep data, png_size_t length) {
-    reinterpret_cast<std::ostream *>(png_get_io_ptr(png_ptr))
+    static_cast<std::ostream *>(png_get_io_ptr(png_ptr))
         ->write(reinterpret_cast<const char *>(data), length);
 }
 
 void flush_data(png_structp png_ptr) {
-    reinterpret_cast<std::ostream *>(png_get_io_ptr(png_ptr))->flush();
+    static_cast<std::ostream *>(png_get_io_ptr(png_ptr))->flush();
 }
 
 // Read a 4-byte (32-bit) integer from a specified position in an istream
 uint32_t read_uint32(std::istream &file, int position) {
     file.seekg(position);
-    uint8_t bytes[4];
-    file.read(reinterpret_cast<char *>(bytes), 4);
+    std::array<uint8_t, 4> bytes;
+    file.read(reinterpret_cast<char *>(bytes.data()), 4);
     return bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3];
 }
 
 // Read a 2-byte (16-bit) integer from a specified position in an istream
 uint16_t read_uint16(std::istream &file, int position) {
     file.seekg(position);
-    uint8_t bytes[2];
-    file.read(reinterpret_cast<char *>(bytes), 2);
+    std::array<uint8_t, 2> bytes;
+    file.read(reinterpret_cast<char *>(bytes.data()), 2);
     return bytes[0] << 8 | bytes[1];
 }
 
@@ -60,13 +61,13 @@ std::vector<uint8_t> decompress_zlib(std::vector<uint8_t> &buffer) {
         stream.avail_in = buffer.size();
         stream.next_in = buffer.data();
 
-        unsigned char out[CHUNK]; // Output buffer
+        std::array<unsigned char, CHUNK> out; // Output buffer
         auto result = std::vector<uint8_t>();
 
         do {
             // Decompress chunk by chunk
             stream.avail_out = CHUNK;
-            stream.next_out = out;
+            stream.next_out = out.data();
 
             ret = inflate(&stream, Z_NO_FLUSH);
             if (ret == Z_STREAM_ERROR) {
@@ -76,7 +77,7 @@ std::vector<uint8_t> decompress_zlib(std::vector<uint8_t> &buffer) {
             // Compute amount decompressed
             unsigned int have = CHUNK - stream.avail_out;
             // Append inflated data to result vector
-            result.insert(result.end(), out, out + have);
+            result.insert(result.end(), out.data(), out.data() + have);
         } while (stream.avail_out == 0); // End when we have remaining space in output buffer
         inflateEnd(&stream);
 
