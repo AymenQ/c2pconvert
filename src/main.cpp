@@ -25,7 +25,7 @@ cxxopts::ParseResult parse_options(int argc, char* argv[]) {
         }
         return result;
     } catch (cxxopts::OptionParseException& exception) {
-        std::cout << options.help() << std::endl;
+        std::cout << options.help();
         exit(0);
     }
 }
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
         C2PFile file(result["input"].as<std::string>());
         file.write_png(result["output"].as<std::string>());
     } catch (std::exception &exception) {
-        std::cout << "Error: " << exception.what();
+        std::cout << "Error: " << exception.what() << std::endl;
         exit(0);
     }    
 
